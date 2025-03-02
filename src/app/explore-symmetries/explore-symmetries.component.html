@@ -1,0 +1,134 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+/>
+<div class="tw-flex tw-flex-row">
+  <div class="tw-w-[15%] tw-flex tw-flex-row">
+    <app-symmetric-images
+      [group]="'Polygons'"
+      (imageChange)="computePointGroup($event)"
+      class="tw-p-5 tw-border-r tw-h-screen tw-overflow-y-auto tw-shadow-xl"
+    ></app-symmetric-images>
+    <app-symmetric-images
+      [group]="'Flowers'"
+      (imageChange)="computePointGroup($event)"
+      class="tw-p-5 tw-border-r tw-h-screen tw-overflow-y-auto tw-shadow-xl"
+    ></app-symmetric-images>
+  </div>
+  <div class="tw-w-[60%] tw-m-auto tw-flex tw-flex-row tw-h-screen">
+    <div class="container">
+      <p class="tw-font-thin tw-text-2xl">{{ image.name }}</p>
+      <div
+        class="cartesian-plane tw-m-auto tw-flex tw-items-center tw-justify-center"
+      >
+        <img
+          src="{{ image.src }}"
+          class="tw-relative tw-z-[2] tw-opacity-90"
+          [style.transform]="stringMatrix"
+          [ngStyle]="{
+            'transition': stringMatrix == '' ? 'none' : 'transform 0.8s linear',
+          }"
+        />
+        <div class="x-axis">
+          <div
+            class="arrow tw-absolute tw-right-0 tw-top-1/2 tw-translate-y-[-50%] tw-rotate-90"
+          ></div>
+        </div>
+        <div class="y-axis">
+          <div
+            class="arrow tw-absolute tw-translate-x-[-50%] tw-top-[-10px]"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-chosen-matrix
+    *ngIf="firstTransformation"
+    [angle]="angle"
+    [transformation]="transformation"
+    class="tw-absolute tw-top-16 tw-right-[20%] tw-z-[-1] tw-m-16 tw-font-thin"
+  ></app-chosen-matrix>
+  <div
+    *ngIf="image.n !== 0"
+    class="tw-flex tw-flex-col tw-gap-10 tw-py-5 tw-pl-5 tw-pr-5 tw-w-[20%] tw-border-l tw-bg-gray-100 tw-shadow-xl tw-overscroll-contain tw-overflow-y-auto tw-h-screen tw-font-thin"
+  >
+    <p class="tw-text-2xl tw-font-logo">
+      Point Group: {{ pointGroupName }}<sub>{{ image.n }}</sub>
+    </p>
+    <div
+      class="tw-cursor-pointer hover:tw-bg-[#D1BECE] tw-border-b tw-rounded-xl tw-shadow tw-px-2 active:tw-shadow-inner"
+      (click)="identityT()"
+    >
+      <div class="tw-flex tw-flex-row tw-gap-5 tw-items-center">
+        <i class="fa-solid fa-i tw-scale-x-[-1]"></i>
+        <div>Identity</div>
+      </div>
+    </div>
+    <div
+      *ngFor="let rotation of rotations"
+      class="tw-cursor-pointer hover:tw-bg-[#889A87] tw-border-b tw-rounded-xl tw-px-2 tw-shadow active:tw-shadow-inner"
+      (click)="rotateImage(rotation)"
+    >
+      <div class="tw-flex tw-flex-row tw-gap-5 tw-items-center">
+        <i class="fa-solid fa-rotate"></i>
+        <div>Rotation of {{ rotation | number : "1.0-1" }}&deg;</div>
+      </div>
+    </div>
+    <div
+      *ngFor="let reflection of reflections"
+      class="tw-cursor-pointer hover:tw-bg-[#66B3FF] tw-border-b tw-rounded-xl tw-shadow tw-px-2 active:tw-shadow-inner"
+      (click)="reflectImage(reflection)"
+    >
+      <div class="tw-flex tw-flex-row tw-gap-5 tw-items-center">
+        <i class="fa-solid fa-r tw-scale-x-[-1]"></i>
+        <div>Reflection at {{ reflection / 2 | number : "1.0-1" }}&deg;</div>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="image.n == 0"
+    class="tw-flex tw-flex-col tw-gap-10 tw-py-5 tw-pl-5 tw-pr-5 tw-w-[20%] tw-border-l tw-bg-gray-100 tw-shadow-xl tw-font-thin"
+  >
+    <div class="tw-text-2xl tw-font-logo">Point Group O(2)</div>
+    <form
+      [formGroup]="formGroup"
+      class="tw-flex tw-flex-col tw-gap-10"
+      (ngSubmit)="transformCircle()"
+      (change)="onChange()"
+    >
+      <div class="tw-flex tw-flex-row tw-gap-8">
+        <label>Rotation</label>
+        <input
+          type="radio"
+          formControlName="transformation"
+          value="rotation"
+          class="tw-accent-[#889a87] tw-cursor-pointer"
+        />
+      </div>
+      <div class="tw-flex tw-flex-row tw-gap-5">
+        <label>Reflection</label>
+        <input
+          type="radio"
+          formControlName="transformation"
+          value="reflection"
+          class="tw-accent-[#66B3FF] tw-cursor-pointer"
+        />
+      </div>
+      <div class="tw-flex tw-flex-row tw-gap-5">
+        <label>Angle:</label>
+        <input
+          type="number"
+          formControlName="angle"
+          class="tw-w-16 tw-rounded-xl tw-pl-2 tw-mr-2"
+        />
+      </div>
+      <button
+        type="submit"
+        class="tw-border tw-rounded-xl tw-bg-[#233452] tw-text-white tw-w-[70%] hover:tw-bg-[#427AA1] tw-m-auto tw-shadow-xl active:tw-shadow-inner"
+        [disabled]="!formGroup.valid"
+      >
+        Apply
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="image tw-m-auto tw-flex tw-flex-row tw-h-screen tw-font-thin">
+  <div
+    class="tw-h-screen tw-bg-gray-100 tw-w-1/4 tw-border-r tw-shadow-xl tw-flex tw-flex-col tw-p-5 tw-gap-10"
+  >
+    <div class="tw-text-2xl">Rules</div>
+    <div>
+      &#x2022;If the sequence passes from 1 to 1 or from 2 to 2 (i.e. it stays
+      in the same box): rotate of 30&deg;:
+    </div>
+    <div class="tw-flex tw-flex-row tw-gap-2">
+      <div class="tw-flex tw-justify-center tw-items-center">M =</div>
+      <div
+        class="tw-border-x tw-rounded-xl tw-border-black tw-aspect-auto tw-grid tw-grid-cols-2 tw-gap-2 tw-p-2"
+      >
+        <p>cos 30&deg;</p>
+        <p>-sin 30&deg;</p>
+        <p>sin 30&deg;</p>
+        <div>cos 30&deg;</div>
+      </div>
+    </div>
+    <div>
+      &#x2022;If the sequence passes from 1 to 2 or from 2 to 1 (i.e. it changes
+      box): reflect over the y-axis of the triangle, interchanging the colors.
+    </div>
+    <div class="tw-flex tw-flex-row tw-gap-2">
+      <div class="tw-flex tw-justify-center tw-items-center">M =</div>
+      <div
+        class="tw-border-x tw-rounded-xl tw-border-black tw-aspect-auto tw-grid tw-grid-cols-2 tw-gap-2 tw-p-2"
+      >
+        <p>cos &theta;</p>
+        <p>sin &theta;</p>
+        <p>sin &theta;</p>
+        <div>-cos &theta;</div>
+      </div>
+    </div>
+    Where &theta;=n*30 and n is the number of times the rotation was applied.
+  </div>
+  <div
+    class="tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-center tw-w-1/2 tw-gap-5"
+  >
+    <div>
+      Here you can follow the first 100 steps of the dance of the Kolakoski
+      sequence:
+    </div>
+    <div class="tw-px-10">
+      1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1,
+      2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 2,
+      1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 2,
+      1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2...
+    </div>
+    <img
+      src="../assets/images/kolakoski_triangle.svg"
+      class="tw-h-[50%] tw-w-1/3"
+      [style.transform]="currentString"
+    />
+  </div>
+  <div class="tw-h-screen tw-bg-gray-100 tw-border-l tw-shadow-xl tw-w-1/4 tw-flex tw-flex-col tw-items-center tw-justify-center tw-p-5 tw-gap-10">
+    <img src="../assets/images/kolakoski100.svg">
+    The pattern for the first 100 steps, to be read from the bottom row.
+  </div>
+</div>

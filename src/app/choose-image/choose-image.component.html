@@ -1,0 +1,11 @@
+<div
+  class="tw-flex tw-flex-row tw-gap-10 tw-overflow-x-auto tw-overscroll-auto tw-overscroll-contain"
+>
+  <div *ngFor="let image of images" class="hover:tw-bg-gray-200 tw-w-24 tw-aspect-square tw-flex tw-items-center tw-justify-center tw-rounded-full tw-cursor-pointer">
+    <img
+      src="{{ image.src }}"
+      class="tw-w-16"
+      (click)="chooseImage(image)"
+    />
+  </div>
+</div>

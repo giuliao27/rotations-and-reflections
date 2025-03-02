@@ -1,0 +1,242 @@
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+<div
+  class="tw-p-5 tw-h-36 tw-border-b tw-shadow-xl tw-mb-5 tw-font-thin tw-bg-gray-100 tw-grid tw-grid-cols-2"
+>
+  <p class="tw-font-normal tw-flex tw-items-center">A vector of norm 1:</p>
+  <div *ngIf="!firstDragging" class="tw-flex tw-items-center">
+    Drag the radius and choose the vector.
+  </div>
+  <div
+    *ngIf="firstDragging"
+    class="tw-flex tw-flex-row tw-gap-2 tw-items-center"
+  >
+    <div
+      class="tw-border-l tw-rounded-md tw-border-black tw-px-2"
+      [ngClass]="{ 'tw-bg-pink-300 tw-text-white': highlight == 1 }"
+    >
+      cos {{ angleToDisplay | number : "1.0-1" }}&deg;,
+    </div>
+    <div
+      class="tw-border-r tw-rounded-md tw-border-black tw-px-2"
+      [ngClass]="{ 'tw-bg-teal-700 tw-text-white': highlight == 1 }"
+    >
+      sin {{ angleToDisplay | number : "1.0-1" }}&deg;
+    </div>
+  </div>
+  <p class="tw-font-normal tw-flex tw-items-center">
+    A vector of norm 1 <br />orthogonal to the first:
+  </p>
+  <div
+    *ngIf="!matrixType && firstDragging && !isDragging"
+    class="tw-flex tw-items-center"
+  >
+    Choose between the two possibilities that make the matrix orthogonal.
+  </div>
+  <div *ngIf="matrixType" class="tw-flex tw-items-center">
+    <div *ngIf="matrixType == 1" class="tw-flex tw-flex-row tw-gap-2">
+      <div
+        class="tw-border-l tw-rounded-md tw-border-black tw-px-2"
+        [ngClass]="{ 'tw-bg-teal-700 tw-text-white': highlight == 2 }"
+      >
+        -sin {{ angleToDisplay | number : "1.0-1" }}&deg;,
+      </div>
+      <div
+        class="tw-border-r tw-rounded-md tw-border-black tw-px-2"
+        [ngClass]="{ 'tw-bg-pink-300 tw-text-white': highlight == 2 }"
+      >
+        cos {{ angleToDisplay | number : "1.0-1" }}&deg;
+      </div>
+    </div>
+    <div *ngIf="matrixType == 2" class="tw-flex tw-flex-row tw-gap-2">
+      <div
+        class="tw-border-l tw-rounded-md tw-border-black tw-px-2"
+        [ngClass]="{ 'tw-bg-teal-700 tw-text-white': highlight == 3 }"
+      >
+        sin {{ angleToDisplay | number : "1.0-1" }}&deg;,
+      </div>
+      <div
+        class="tw-border-r tw-rounded-md tw-border-black tw-px-2"
+        [ngClass]="{ 'tw-bg-pink-300 tw-text-white': highlight == 3 }"
+      >
+        -cos {{ angleToDisplay | number : "1.0-1" }}&deg;
+      </div>
+    </div>
+  </div>
+</div>
+<div
+*ngIf="matrixType"
+  class="tw-absolute tw-border-x-2 tw-border-black tw-grid tw-grid-cols-2 tw-gap-5 tw-justify-items-center tw-p-2 tw-rounded-xl tw-top-52 tw-top-0 tw-m-10 tw-w-max tw-font-thin"
+>
+  <div>cos {{ angleToDisplay | number : "1.0-1" }}&deg;</div>
+  <div *ngIf="matrixType == 1">
+    -sin {{ angleToDisplay | number : "1.0-1" }}&deg;
+  </div>
+  <div *ngIf="matrixType == 2"
+    >sin {{ angleToDisplay | number : "1.0-1" }}&deg;</div
+  >
+  <div>sin {{ angleToDisplay | number : "1.0-1" }}&deg;</div>
+  <div *ngIf="matrixType == 1">
+    cos {{ angleToDisplay | number : "1.0-1" }}&deg;
+  </div>
+  <div *ngIf="matrixType == 2"
+    >-cos {{ angleToDisplay | number : "1.0-1" }}&deg;</div
+  >
+</div>
+
+<div class="cartesian-plane tw-flex tw-items-center tw-justify-center">
+  <div
+    class="circle-container tw-flex tw-items-center tw-justify-center"
+    (mousemove)="onMouseMove($event)"
+    (mousedown)="onMouseDown($event)"
+    (mouseup)="onMouseUp($event)"
+  >
+    <div class="circle tw-absolute">
+      <div class="segments">
+        <div
+          class="circle-segment hover:tw-cursor-pointer !tw-opacity-100"
+          [style.transform]="'rotate(' + segmentAngle + 'deg)'"
+          [ngStyle]="{
+            transition: fromRotate == true ? 'transform 0.0s linear' : 'none'
+          }"
+          (mouseover)="highlight = 1"
+          (mouseleave)="highlight = 0"
+        >
+          <div
+            class="arrow tw-absolute tw-translate-x-[-30%] tw-top-[12] tw-z-[3]"
+          ></div>
+        </div>
+        <div
+          *ngIf="firstDragging"
+          class="circle-segment tw-opacity-10 hover:tw-cursor-pointer"
+          [style.transform]="'rotate(' + (segmentAngle - 90) + 'deg)'"
+          (click)="chooseSecondVector(1)"
+          [ngClass]="{ chosen: matrixType === 1 }"
+          [ngStyle]="{
+            transition: fromRotate == true ? 'transform 0.0s linear' : 'none'
+          }"
+          (mouseover)="highlight = 2"
+          (mouseleave)="highlight = 0"
+        >
+          <div
+            class="arrow tw-absolute tw-translate-x-[-30%] tw-top-[12] tw-z-[3]"
+          ></div>
+        </div>
+        <div
+          *ngIf="firstDragging"
+          class="circle-segment tw-opacity-10 hover:tw-cursor-pointer"
+          [style.transform]="'rotate(' + (segmentAngle + 90) + 'deg)'"
+          (click)="chooseSecondVector(2)"
+          [ngClass]="{ chosen: matrixType === 2 }"
+          [ngStyle]="{
+            transition: fromRotate == true ? 'transform 0.0s linear' : 'none'
+          }"
+          (mouseover)="highlight = 3"
+          (mouseleave)="highlight = 0"
+        >
+          <div
+            class="arrow tw-absolute tw-translate-x-[-30%] tw-top-[12] tw-z-[3]"
+          ></div>
+        </div>
+      </div>
+      <div
+        *ngIf="firstDragging"
+        class="sin !tw-opacity-100 tw-z-[-2]"
+        [style.height]="50 + '%'"
+        [style.right]="(1 - vector1[0]) * 50 + '%'"
+        [ngClass]="{
+        'tw-top-[50%]': vector1[1] < 0,
+        'tw-bottom-[50%]': vector1[1] > 0,
+      }"
+        [ngStyle]="{
+          transition: fromRotate == true ? 'right 0.0s linear' : 'none'
+        }"
+      >
+        <p
+          *ngIf="!isDragging"
+          class="tw-text-[8px] tw-text-justify tw-rotate-90 tw-translate-y-[40px] tw-text-teal-700 tw-translate-x-[5px]"
+        >
+          sin&#952;
+        </p>
+      </div>
+      <div
+        class="cos !tw-opacity-100 tw-z-[-1] tw-bg-rose-500"
+        [ngStyle]="{
+        'margin-right': vector1[0] > 0 ? (1 - vector1[0]) * 50 + '%' : '50%',
+        'margin-left': vector1[0] < 0 ? (1 + vector1[0]) * 50 + '%' : '50%',
+        'transition': fromRotate == true ? 'margin-left 0.0s linear, margin-right 0.0s linear' : 'none',
+      }"
+      >
+        <p
+          *ngIf="firstDragging && !isDragging"
+          class="tw-text-[8px] tw-text-center tw-text-rose-500"
+        >
+          cos&#952;
+        </p>
+      </div>
+    </div>
+    <div class="x-axis">
+      <div
+        class="arrow tw-absolute tw-right-0 tw-top-1/2 tw-translate-y-[-50%] tw-rotate-90"
+      ></div>
+    </div>
+    <p
+      class="tw-rounded-full tw-bg-black tw-border tw-border-black tw-w-2 tw-h-2"
+    ></p>
+    <div
+      *ngIf="firstDragging"
+      class="sector circle-sector tw-z-[-10]"
+      [ngStyle]="{
+        'background-image':
+          angleToDisplay >= 180
+            ? 'linear-gradient(' +
+              180 +
+              'deg, red 50%, transparent 50%), linear-gradient(' +
+              -angleToDisplay +
+              'deg, red 50%, RGB(102, 179, 255) 50%)'
+            : 'linear-gradient(' +
+              180 +
+              'deg, transparent 50%, RGB(102, 179, 255) 50%), linear-gradient(' +
+              -angleToDisplay +
+              'deg, red 50%, RGB(102, 179, 255) 50%)',
+      }"
+    >
+      <p *ngIf="angleToDisplay > 45" class="tw-absolute tw-right-[15px]">
+        &theta;
+      </p>
+    </div>
+    <div class="y-axis">
+      <div class="arrow tw-absolute tw-translate-x-[-50%] tw-top-[-10px]"></div>
+    </div>
+  </div>
+  <div
+    class="tw-flex tw-flex-col tw-gap-24 tw-items-center tw-justify-center tw-w-[10%]"
+  >
+    <div class="tw-group tw-flex tw-flex-col tw-w-full">
+      <button
+        class="tw-bg-[#b2d7f9ff] tw-border tw-rounded-xl tw-text-xs active:tw-ring tw-p-[5px]"
+        (click)="rotateOf15()"
+      >
+        <span class="material-symbols-outlined"> clock_loader_10 </span>
+      </button>
+      <span
+        class="group-hover:tw-opacity-100 tw-opacity-0 tw-transition-opacity tw-bg-gray-200 tw-px-1 tw-text-xs tw-text-black tw-rounded-md tw-mx-auto"
+        >15&deg;</span
+      >
+    </div>
+    <div class="tw-group tw-flex tw-flex-col tw-w-full">
+      <button
+        class="tw-bg-[#b2d7f9ff] tw-border tw-rounded-xl tw-text-xs active:tw-ring tw-p-[5px]"
+        (click)="reload()"
+      >
+        <span class="material-symbols-outlined"> undo </span>
+      </button>
+      <span
+        class="group-hover:tw-opacity-100 tw-opacity-0 tw-transition-opacity tw-bg-gray-200 tw-px-1 tw-text-xs tw-text-black tw-rounded-md tw-mx-auto"
+        >Restart</span
+      >
+    </div>
+  </div>
+</div>

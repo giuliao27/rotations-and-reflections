@@ -1,0 +1,15 @@
+<div class="tw-flex tw-flex-row tw-h-screen">
+  <app-choose-matrix
+    class="tw-w-[50%] tw-h-screen tw-flex tw-flex-col"
+    (matrixChange)="matrix = $event"
+    (matrixTypeChange)="matrixType = $event"
+    (angleChange)="angle = $event"
+  ></app-choose-matrix>
+  <div class="tw-w-[1px] tw-bg-gray-200"></div>
+  <app-apply-matrix
+    class="tw-w-[50%] tw-h-screen tw-flex tw-flex-col"
+    [matrix]="matrix"
+    [matrixType]="matrixType"
+    [angle]="angle"
+  ></app-apply-matrix>
+</div>
