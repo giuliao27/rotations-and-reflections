@@ -16,7 +16,7 @@ Angular CLI: Install globally using npm on your terminal:
 ## Instructions
 
 Open a terminal or command prompt and navigate to the unzipped project directory:
-`cd orthogonal-matrices-main`
+`cd rotations-and-reflections`
 
 Install dependencies:
 `npm install`
